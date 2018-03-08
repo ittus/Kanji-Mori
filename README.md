@@ -2,6 +2,9 @@
 
 > A simple extensions to learn and remember Kanji
 
+# Screenshot
+![Example](docs/images/example1.png)
+
 ## Build Setup
 
 ``` bash
@@ -14,5 +17,3 @@ npm run dev
 # build for production with minification
 npm run build
 ```
-
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).

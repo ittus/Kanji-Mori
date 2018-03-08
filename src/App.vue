@@ -44,7 +44,7 @@
       </div>
       <div class="columns">
         <div class="column">
-          <div v-for="(example, index) in exampleList" :key="example.word + index" class="example-item">
+          <div v-for="(example, index) in exampleList" :key="example.word + index" class="font-size-md">
             <span class="title is-5">{{ example.word }}</span> ( {{ example.hiragana }} ) {{ example.meaning }}
           </div>
         </div>
@@ -138,10 +138,10 @@ a {
 }
 
 .word-name {
-  margin-bottom: none !important;
+  margin-bottom: 0px !important;
 }
 
-.example-item {
+.font-size-md {
   font-size: 1.5rem;
 }
 </style>
