@@ -1,7 +1,18 @@
 <template>
   <div id="app">
     <div class="container">
-      <h1 class="title">{{ currentWord.cn_mean }} ({{ currentWord.vi_mean }})</h1>
+      <div class="level">
+        <h1 class="title has-text-centered level-item word-name">{{ currentWord.cn_mean }} ({{ currentWord.vi_mean }})</h1>
+        <button class="button is-success level-right" @click.stop.prevent="refreshWord">
+          <!-- <b-icon
+               pack="fas"
+               icon="sync-alt"
+               custom-class="fa-spin">
+           </b-icon> -->
+             <span>Refresh</span>
+         </button>
+      </div>
+
       <div class="columns">
        <div class="column is-one-quarter">
            <div class="title main-word">{{ currentWord.word }}</div>
@@ -33,7 +44,7 @@
       </div>
       <div class="columns">
         <div class="column">
-          <div v-for="example in exampleList" :key="example.word">
+          <div v-for="(example, index) in exampleList" :key="example.word + index" class="example-item">
             <span class="title is-5">{{ example.word }}</span> ( {{ example.hiragana }} ) {{ example.meaning }}
           </div>
         </div>
@@ -73,13 +84,22 @@ export default {
       console.log('examples', examples)
       return examples
     }
+  },
+  created() {
+    this.refreshWord()
+  },
+  methods: {
+    refreshWord() {
+      const randomIdx = Math.floor(Math.random() * 512)
+      this.currentWord = simpleKanjiList[randomIdx]
+    }
   }
 }
 </script>
 
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'Noto Sans', sans-serif, Lato, 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -114,7 +134,14 @@ a {
 }
 
 .main-word {
-  font-size: 10rem;
+  font-size: 12rem;
 }
 
+.word-name {
+  margin-bottom: none !important;
+}
+
+.example-item {
+  font-size: 1.5rem;
+}
 </style>
