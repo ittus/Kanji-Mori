@@ -21,9 +21,16 @@
                </a>
            </div>
            <div class="card-content">
-               <div class="content">
+             <div class="content">
+               <div class="block">
+                 <div class="columns is-multiline">
+                   <div v-for="lesson in lessons" :key="lesson" class="column is-3">
+                      <b-checkbox>{{ lesson }}</b-checkbox>
+                   </div>
+                 </div>
 
                </div>
+             </div>
            </div>
            <footer class="card-footer">
                <a class="card-footer-item" @click="isShowSetting = false">Close</a>
@@ -38,7 +45,8 @@
   	name: "Setting",
   	data(){
   		return {
-  			isShowSetting: false
+  			isShowSetting: true,
+        lessons: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
   		}
   	},
 
