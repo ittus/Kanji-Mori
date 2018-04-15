@@ -7,7 +7,6 @@
         </b-icon>
         <span>Settings</span>
       </a>
-      <div v-else-if="isLoadingSetting">Loading...</div>
       <div v-else>
         <section>
          <b-collapse class="card">
@@ -26,7 +25,7 @@
                  <div class="block">
                    <div class="columns is-multiline">
                      <div v-for="lesson in lessons" :key="lesson" class="column is-3">
-                        <b-checkbox>{{ lesson }}</b-checkbox>
+                        <b-checkbox v-model="localSettings">{{ lesson }}</b-checkbox>
                      </div>
                    </div>
 
@@ -34,6 +33,7 @@
                </div>
              </div>
              <footer class="card-footer">
+                 <a class="card-footer-item" @click="resetSettings">Reset</a>
                  <a class="card-footer-item" @click="isShowSetting = false">Close</a>
              </footer>
          </b-collapse>
@@ -42,25 +42,23 @@
     </div>
 </template>
 <script>
-  import { mapState } from 'vuex'
+  import { mapActions } from 'vuex'
     // TODO: Add loading spinner
   export default {
   	name: "Setting",
-  	data(){
+  	data() {
   		return {
   			isShowSetting: true,
-        lessons: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+        lessons: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+        localSettings: []
   		}
   	},
 
   	computed: {
-      ...mapState(['isLoadingSetting'])
     },
 
   	methods: {
-  		functionExample(){
-        //Basic Component method
-  		}
+      ...mapActions(['resetSettings'])
   	}
   }
 </script>

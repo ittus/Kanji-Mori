@@ -65,4 +65,4 @@ function Extension () {
 
 }
 
-module.exports = new Extension();
+export default new Extension();

@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <div class="container">
+    <div v-if="isLoadingSetting">Loading...</div>
+    <div v-else class="container">
       <div class="level">
         <h1 class="title has-text-centered level-item word-name">{{ currentWord.cn_mean }} ({{ currentWord.vi_mean }})</h1>
         <button class="button is-success level-right" @click.stop.prevent="refreshWord">
@@ -49,14 +50,15 @@
           </div>
         </div>
       </div>
+      <setting-panel>
+        <setting />
+      </setting-panel>
     </div>
-    <setting-panel>
-      <setting />
-    </setting-panel>
   </div>
 </template>
 
 <script>
+import { mapActions, mapState, mapGetters } from 'vuex'
 import simpleKanjiList from './data/ikanji.js'
 import Setting from './components/Setting.vue'
 import SettingPanel from './components/SettingPanel.vue'
@@ -72,7 +74,16 @@ export default {
       currentWord: simpleKanjiList[100]
     }
   },
+  watch: {
+    isLoadingSetting () {
+      if (isLoadingSetting) {
+        this.refreshWord()
+      }
+    }
+  },
   computed: {
+    ...mapState(['isLoadingSetting', 'wordList']),
+    ...mapGetters(['randomWord']),
     exampleList () {
       let examples = []
       console.log(this.currentWord)
@@ -92,12 +103,13 @@ export default {
     }
   },
   created() {
-    this.refreshWord()
+    this.getSettings()
   },
   methods: {
+    ...mapActions(['getSettings']),
     refreshWord() {
-      const randomIdx = Math.floor(Math.random() * 512)
-      this.currentWord = simpleKanjiList[randomIdx]
+      const randomIdx = Math.floor(Math.random() * this.wordList.length)
+      this.currentWord = this.wordList[randomIdx]
     }
   }
 }
