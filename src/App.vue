@@ -4,7 +4,7 @@
       <div class="level">
         <h1 class="title has-text-centered level-item word-name">{{ currentWord.cn_mean }} ({{ currentWord.vi_mean }})</h1>
         <button class="button is-success level-right" @click.stop.prevent="refreshWord">
-          <!-- <b-icon
+            <!-- <b-icon
                pack="fas"
                icon="sync-alt"
                custom-class="fa-spin">
@@ -50,17 +50,23 @@
         </div>
       </div>
     </div>
-
-
-
+    <setting-panel>
+      <setting />
+    </setting-panel>
   </div>
 </template>
 
 <script>
 import simpleKanjiList from './data/ikanji.js'
+import Setting from './components/Setting.vue'
+import SettingPanel from './components/SettingPanel.vue'
 
 export default {
   name: 'app',
+  components: {
+    Setting,
+    SettingPanel
+  },
   data () {
     return {
       currentWord: simpleKanjiList[100]
@@ -135,6 +141,7 @@ a {
 
 .main-word {
   font-size: 12rem;
+  font-weight: 500;
 }
 
 .word-name {
