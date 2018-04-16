@@ -25,7 +25,7 @@
                  <div class="block">
                    <div class="columns is-multiline">
                      <div v-for="lesson in lessons" :key="lesson" class="column is-3">
-                        <b-checkbox v-model="localSettings">{{ lesson }}</b-checkbox>
+                        <b-checkbox v-model="localSettings" :native-value="lesson">{{ lesson }}</b-checkbox>
                      </div>
                    </div>
 
@@ -42,23 +42,39 @@
     </div>
 </template>
 <script>
-  import { mapActions } from 'vuex'
+  import { mapActions, mapState } from 'vuex'
+  import * as Constants from '../utils/constants'
     // TODO: Add loading spinner
   export default {
   	name: "Setting",
   	data() {
   		return {
-  			isShowSetting: true,
+  			isShowSetting: false,
         lessons: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
         localSettings: []
   		}
   	},
-
-  	computed: {
+    created() {
+      console.log('localSettings created')
+      this.localSettings = this.settings[Constants.KANJI_512_KEY]
     },
-
+  	computed: {
+      ...mapState(['settings'])
+    },
+    watch: {
+      localSettings (newVal, oldVal) {
+        console.log('localSettings change', newVal, oldVal)
+        if (newVal.length !== oldVal.length) {
+          const newSettings = {
+            ...this.settings,
+            [Constants.KANJI_512_KEY]: newVal
+          }
+          this.saveSettings(newSettings)
+        }
+      }
+    },
   	methods: {
-      ...mapActions(['resetSettings'])
+      ...mapActions(['resetSettings', 'saveSettings'])
   	}
   }
 </script>

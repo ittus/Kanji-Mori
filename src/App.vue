@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div v-if="isLoadingSetting">Loading...</div>
+    <div v-else-if="!currentWord">Generating...</div>
     <div v-else class="container">
       <div class="level">
         <h1 class="title has-text-centered level-item word-name">{{ currentWord.cn_mean }} ({{ currentWord.vi_mean }})</h1>
@@ -59,7 +60,6 @@
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
-import simpleKanjiList from './data/ikanji.js'
 import Setting from './components/Setting.vue'
 import SettingPanel from './components/SettingPanel.vue'
 
@@ -71,14 +71,18 @@ export default {
   },
   data () {
     return {
-      currentWord: simpleKanjiList[100]
+      currentWord: null
     }
   },
   watch: {
-    isLoadingSetting () {
-      if (isLoadingSetting) {
-        this.refreshWord()
-      }
+    'isLoadingSetting': {
+      handler: function (newVal) {
+        console.log('isLoadingSetting change', newVal)
+        if (!newVal) {
+          this.refreshWord()
+        }
+      },
+      deep: true
     }
   },
   computed: {
@@ -103,11 +107,13 @@ export default {
     }
   },
   created() {
+    console.log(this.isLoadingSetting)
     this.getSettings()
   },
   methods: {
     ...mapActions(['getSettings']),
     refreshWord() {
+      console.log('wordList', this.wordList.length)
       const randomIdx = Math.floor(Math.random() * this.wordList.length)
       this.currentWord = this.wordList[randomIdx]
     }
