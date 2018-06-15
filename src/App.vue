@@ -1,11 +1,17 @@
 <template>
   <div id="app">
     <div v-if="isLoadingSetting">Loading...</div>
-    <div v-else-if="!currentWord">Generating...</div>
+    <div v-else-if="!currentWords.length">Generating...</div>
     <div v-else class="container">
       <div class="level">
-        <h1 class="title has-text-centered level-item word-name">{{ currentWord.cn_mean }} ({{ currentWord.vi_mean }})</h1>
-        <button class="button is-success level-right" @click.stop.prevent="refreshWord">
+        <div class="level-left">
+          <b-input placeholder="Search..."
+              v-model="searchText"
+              type="search"
+              icon="magnify">
+          </b-input>
+        </div>
+        <button class="button is-success level-right" @click.stop.prevent="refreshWordHandler">
             <!-- <b-icon
                pack="fas"
                icon="sync-alt"
@@ -14,43 +20,19 @@
              <span>Refresh</span>
          </button>
       </div>
-
-      <div class="columns">
-       <div class="column is-one-quarter">
-           <div class="title main-word">{{ currentWord.word }}</div>
-           <div class="speak-way">
-             <div class="columns">
-               <div class="column">
-                  Onjomi:
-               </div>
-               <div class="column">
-                  {{ currentWord.onjomi }} ({{ currentWord.ronjomi }})
-               </div>
-             </div>
-             <div class="columns">
-               <div class="column">
-                  Kunjomi:
-               </div>
-               <div class="column">
-                 {{ currentWord.kunjomi }} ({{ currentWord.rkunjomi }})
-               </div>
-             </div>
-           </div>
-       </div>
-       <div class="column">
-         <div v-html="currentWord.remember"></div>
-         <figure class="image pad-horizontal-25">
-           <img alt="Image to remember" :src="`./dist/assets/imgs/ikanji/${currentWord.image}.jpg`" >
-         </figure>
-       </div>
-      </div>
-      <div class="columns">
-        <div class="column">
-          <div v-for="(example, index) in exampleList" :key="example.word + index" class="font-size-md">
-            <span class="title is-5">{{ example.word }}</span> ( {{ example.hiragana }} ) {{ example.meaning }}
+      <swiper :options="swiperOption" v-if="currentWords.length > 1">
+        <swiper-slide v-for="word in currentWords">
+          <word-card :currentWord="word" />
+        </swiper-slide>
+        <div class="swiper-button-prev" slot="button-prev"></div>
+        <div class="swiper-button-next" slot="button-next"></div>
+        <div class="swiper-pagination" slot="pagination">
+          <div>
+            Thang Dep trai
           </div>
         </div>
-      </div>
+      </swiper>
+      <word-card :currentWord="currentWords[0]" v-else />
       <setting-panel>
         <setting />
       </setting-panel>
@@ -62,16 +44,33 @@
 import { mapActions, mapState, mapGetters } from 'vuex'
 import Setting from './components/Setting.vue'
 import SettingPanel from './components/SettingPanel.vue'
+import WordCard from './components/WordCard.vue'
+import 'swiper/dist/css/swiper.css'
+
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 export default {
   name: 'app',
   components: {
     Setting,
-    SettingPanel
+    SettingPanel,
+    WordCard,
+    swiper,
+    swiperSlide
   },
   data () {
     return {
-      currentWord: null
+      currentWords: [],
+      searchText: null,
+      swiperOption: {
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        },
+        pagination: {
+          el: '.swiper-pagination'
+        }
+      }
     }
   },
   watch: {
@@ -83,28 +82,27 @@ export default {
         }
       },
       deep: true
+    },
+    'searchText': function (newVal) {
+      const validWords = []
+      const currentWordList = []
+      for (let idx = 0; idx < newVal.length; idx++) {
+        const char = newVal[idx]
+        if (this.wordDict[char] && !currentWordList.includes(char)) {
+          currentWordList.push(char)
+          validWords.push(this.wordDict[char])
+        }
+      }
+      if (validWords.length > 0) {
+        this.currentWords = validWords
+      } else if (this.currentWords.length === 0) {
+        this.refreshWord()
+      }
     }
   },
   computed: {
     ...mapState(['isLoadingSetting', 'wordList']),
-    ...mapGetters(['randomWord']),
-    exampleList () {
-      let examples = []
-      console.log(this.currentWord)
-      if (this.currentWord && this.currentWord.note) {
-        const wordPairs = this.currentWord.note.split('※').filter(item => item && item.length > 0)
-        examples = wordPairs.map(item => {
-          const words = item.split('∴')
-          return {
-            'word': words[0],
-            'hiragana': words[1],
-            'meaning': words[2]
-          }
-        })
-      }
-      console.log('examples', examples)
-      return examples
-    }
+    ...mapGetters(['wordDict']),
   },
   created() {
     console.log(this.isLoadingSetting)
@@ -113,9 +111,12 @@ export default {
   methods: {
     ...mapActions(['getSettings']),
     refreshWord() {
-      console.log('wordList', this.wordList.length)
       const randomIdx = Math.floor(Math.random() * this.wordList.length)
-      this.currentWord = this.wordList[randomIdx]
+      this.currentWords = [this.wordList[randomIdx]]
+    },
+    refreshWordHandler() {
+      this.refreshWord()
+      this.searchText = ''
     }
   }
 }
@@ -168,5 +169,14 @@ a {
 
 .font-size-md {
   font-size: 1.5rem;
+}
+
+.m-0 {
+  margin: 0px !important;
+}
+
+.mx-2 {
+  margin-left: 2rem !important;
+  margin-right: 2rem !important;
 }
 </style>

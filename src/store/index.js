@@ -52,7 +52,14 @@ const actions = {
     })
   }
 }
-const getters = {}
+const getters = {
+  wordDict: state => {
+    return state.wordList.reduce((a, c) => {
+      a[c.word] = c
+      return a
+    }, {})
+  }
+}
 
 export default new Vuex.Store({
   state: initState,
