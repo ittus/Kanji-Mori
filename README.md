@@ -2,8 +2,10 @@
 
 > A simple extensions to learn and remember Kanji
 
+[![Available on Chrome Web Store](assets/store_badge.png)](https://chrome.google.com/webstore/detail/kanji-mori/fhmffjbmcgpcmcciodbiklofidhjdfcc)
+
 # Screenshot
-![Example](docs/images/example1.png)
+![Example](assets/screen1.png)
 
 ## Build Setup
 

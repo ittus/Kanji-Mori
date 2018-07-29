@@ -1,13 +1,14 @@
 {
   "name": "Kanji Mori",
   "description": "A simple extension to learn and remember Kanji",
-  "version": "0.1",
+  "version": "1.0.0",
   "manifest_version": 2,
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
   "permissions": [
-    "storage"
+    "storage",
+    "activeTab"
   ],
   "icons": {
     "128": "logo_128.png"
