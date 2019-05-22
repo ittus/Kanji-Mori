@@ -1,13 +1,14 @@
 {
   "name": "kanji-mori",
   "description": "A simple extensions to learn and remember Kanji",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Vu Minh Thang <vuminhthang.cm@gmail.com>",
   "license": "MIT",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "test": "echo 'Success'"
   },
   "dependencies": {
     "@mdi/font": "^2.4.85",

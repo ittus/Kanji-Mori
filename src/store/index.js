@@ -14,7 +14,6 @@ let initState = {
 
 const mutations = {
   setSettingsInfo(state, payload) {
-    console.log('setSettings', payload)
     state.settings = payload
     state.wordList = simpleKanjiList.filter(wordInfo => {
       return payload[Constants.KANJI_512_KEY].includes(wordInfo.lesson)
@@ -28,7 +27,6 @@ const actions = {
   getSettings({ commit, dispatch }) {
     commit('changeLoadingState', true)
     storage.get(Constants.SETTINGS_KEY, (res) => {
-      console.log('Get settings', res)
       if (!res || !res[Constants.SETTINGS_KEY]) {
         dispatch('resetSettings')
       } else {

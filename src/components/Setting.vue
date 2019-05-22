@@ -23,7 +23,7 @@
              <div class="card-content">
                <div class="content">
                  <div class="block">
-                   <div class="columns is-multiline">
+                   <div class="columns is-multiline lesson-list">
                      <div v-for="lesson in lessons" :key="lesson" class="column is-3">
                         <b-checkbox v-model="localSettings" :native-value="lesson">{{ lesson }}</b-checkbox>
                      </div>
@@ -50,7 +50,7 @@
   	data() {
   		return {
   			isShowSetting: false,
-        lessons: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+        lessons: 32,
         localSettings: []
   		}
   	},
@@ -78,3 +78,11 @@
   	}
   }
 </script>
+
+<style lang="scss">
+.lesson-list {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+</style>
