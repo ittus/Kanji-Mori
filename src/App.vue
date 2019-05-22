@@ -21,7 +21,7 @@
          </button>
       </div>
       <swiper :options="swiperOption" v-if="currentWords.length > 1">
-        <swiper-slide v-for="word in currentWords">
+        <swiper-slide v-for="(word, index) in currentWords" :key="index">
           <word-card :currentWord="word" />
         </swiper-slide>
         <div class="swiper-button-prev" slot="button-prev"></div>
@@ -76,7 +76,6 @@ export default {
   watch: {
     'isLoadingSetting': {
       handler: function (newVal) {
-        console.log('isLoadingSetting change', newVal)
         if (!newVal) {
           this.refreshWord()
         }
